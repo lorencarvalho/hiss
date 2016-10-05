@@ -58,10 +58,8 @@ setuptools.setup(
     author="Loren Carvalho",
     author_email='me@loren.pizza',
     url='https://github.com/sixninetynine/hiss',
-    packages=[
-        'hiss',
-    ],
-    package_dir={'hiss': 'hiss'},
+    packages=setuptools.find_packages('src'),
+    package_dir={'src': 'hiss'},
     entry_points={
         'console_scripts': [
             'hiss=hiss.cli:main'
@@ -69,6 +67,7 @@ setuptools.setup(
     },
     include_package_data=True,
     install_requires=requirements,
+    test_requires=requirements + ['virtualenv'],
     license="MIT license",
     keywords='hiss',
     classifiers=[
