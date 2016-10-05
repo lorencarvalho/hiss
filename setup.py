@@ -15,6 +15,7 @@ else:
 requirements = [
     'Click>=6.0',
     'iPython{0}'.format(ipython_version),
+    'traitlets',
 ]
 
 

@@ -1,15 +1,37 @@
-# -*- coding: utf-8 -*-
+import sys
 
 import click
+import warnings
+
+from IPython import embed
+from IPython import version_info as ipython_version
+
+from traitlets.config.loader import Config
+
+
+def embed_ipython():
+    warnings.filterwarnings("ignore", category=UserWarning)
+
+    c = Config()
+
+    if ipython_version[0] == 5 :
+        from IPython.terminal.prompts import ClassicPrompts
+        c.TerminalInteractiveShell.prompts_class = ClassicPrompts
+    else:
+        c.PromptManager.in_template  = '>>> '
+        c.PromptManager.in2_template = '... '
+        c.PromptManager.out_template = ''
+
+    c.InteractiveShell.banner1 = "\nhiss - python{0}.{1}\n".format(*sys.version_info[0:2])
+    c.PrefilterManager.multi_line_specials = True
+    c.InteractiveShell.autoindent = True
+    c.InteractiveShell.colors = 'linux'
+    c.InteractiveShell.confirm_exit = False
+
+    embed(config=c)
 
 
 @click.command()
 def main(args=None):
     """Console script for hiss"""
-    click.echo("Replace this message by putting your code into "
-               "hiss.cli.main")
-    click.echo("See click documentation at http://click.pocoo.org/")
-
-
-if __name__ == "__main__":
-    main()
+    embed_ipython()
