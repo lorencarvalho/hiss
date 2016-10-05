@@ -12,7 +12,10 @@ except ImportError:
     import IPython
     ipython_version = tuple(map(int, IPython.__version__.split('.')))
 
-from traitlets.config.loader import Config
+if ipython_version[0] >= 5:
+    from traitlets.config.loader import Config
+else:
+    from IPython.config.loader import Config
 
 
 def embed_ipython():
@@ -20,7 +23,7 @@ def embed_ipython():
 
     c = Config()
 
-    if ipython_version[0] == 5 :
+    if ipython_version[0] >= 5 :
         from IPython.terminal.prompts import ClassicPrompts
         c.TerminalInteractiveShell.prompts_class = ClassicPrompts
     else:
