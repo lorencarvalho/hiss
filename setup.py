@@ -1,3 +1,4 @@
+import os
 import sys
 import setuptools
 import subprocess
@@ -7,19 +8,10 @@ with open('README.rst') as readme_file:
 
 requirements = [
     'Click>=6.0',
-    'setuptools>25',
+    'IPython>=5',
+    'traitlets',
+    'configparser',
 ]
-
-python_version = sys.version_info[0:2]
-
-if python_version == (2, 6):
-    requirements.append("IPython<=0.13")
-
-if python_version <= (3, 3):
-    requirements.extend(["enum34", "backports.shutil-get-terminal-size"])
-
-if python_version >= (2, 7):
-    requirements.extend(["IPython>=5", "traitlets"])
 
 
 class Venv(setuptools.Command):
@@ -52,28 +44,26 @@ class Venv(setuptools.Command):
 
 setuptools.setup(
     name='hiss-repl',
-    version='0.1.13',
+    version='0.2.2',
     description="A simple and easily configured iPython-based python repl",
     long_description=readme,
     author="Loren Carvalho",
     author_email='me@loren.pizza',
     url='https://github.com/sixninetynine/hiss',
     packages=setuptools.find_packages('src'),
-    package_dir={'src': 'hiss'},
+    package_dir={'': 'src'},
     entry_points={
         'console_scripts': [
             'hiss=hiss.cli:main'
-        ]
+        ],
     },
     include_package_data=True,
     install_requires=requirements,
-    test_requires=requirements + ['virtualenv'],
     license="MIT license",
     keywords='hiss',
     classifiers=[
         'License :: OSI Approved :: MIT License',
         "Programming Language :: Python :: 2",
-        'Programming Language :: Python :: 2.6',
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.3',
