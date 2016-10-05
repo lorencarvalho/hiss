@@ -19,7 +19,8 @@ else:
 
 
 def embed_ipython():
-    warnings.filterwarnings("ignore", category=UserWarning)
+    for warning in (UserWarning, DeprecationWarning, RuntimeWarning):
+        warnings.filterwarnings("ignore", category=warning)
 
     c = Config()
 
