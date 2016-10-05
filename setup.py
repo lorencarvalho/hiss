@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 import sys
 import setuptools
 import subprocess
@@ -49,7 +47,7 @@ class Venv(setuptools.Command):
 
 setuptools.setup(
     name='hiss-repl',
-    version='0.1.3',
+    version='0.1.4',
     description="A simple and easily configured iPython-based python repl",
     long_description=readme,
     author="Loren Carvalho",
