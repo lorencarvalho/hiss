@@ -9,6 +9,7 @@ try:
     from IPython import version_info as ipython_version
 except ImportError:
     # probably 0.11 or thereabout
+    import IPython
     ipython_version = tuple(map(int, IPython.__version__.split('.')))
 
 from traitlets.config.loader import Config
