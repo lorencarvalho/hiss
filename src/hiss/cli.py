@@ -26,6 +26,19 @@ def casted(value):
     return value
 
 
+def load_venv():
+    if 'VIRTUAL_ENV' in os.environ:
+        virtual_env = os.path.join(
+            os.environ.get('VIRTUAL_ENV'),
+            'lib',
+            'python{0}.{1}'.format(*sys.version_info[0:2]),
+            'site-packages',
+        )
+        if os.path.exists(virtual_env):
+            site.addsitedir(virtual_env)
+            print('(( virtualenv detected -> {} ))'.format(virtual_env))
+
+
 def load_config(defaults, path):
     config = configparser.RawConfigParser()
     config.optionxform = str  # preserve case, cast ints to str
@@ -66,5 +79,8 @@ def main(config):
 
     # override defaults and add add'l options
     c = load_config(c, config)
+
+    # load virtual
+    load_venv()
 
     embed_ipython(c)

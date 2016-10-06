@@ -1,9 +1,9 @@
 ===============================
-hiss ( still a work in progress )
+hiss
 ===============================
 
 
-.. image:: https://img.shields.io/pypi/v/hiss.svg
+.. image:: https://img.shields.io/pypi/v/hiss_repl.svg
         :target: https://pypi.python.org/pypi/hiss_repl
 
 
@@ -11,4 +11,3 @@ A simplified, stripped down iPython-based repl with sane defaults and easy dotfi
 
 
 * Free software: MIT license
-* Documentation: https://hiss.readthedocs.io.
