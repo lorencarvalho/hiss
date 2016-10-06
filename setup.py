@@ -3,9 +3,6 @@ import sys
 import setuptools
 import subprocess
 
-with open('README.rst') as readme_file:
-    readme = readme_file.read()
-
 requirements = [
     'Click>=6.0',
     'IPython>=5',
@@ -46,7 +43,6 @@ setuptools.setup(
     name='hiss-repl',
     version='0.2.3',
     description="A simple and easily configured iPython-based python repl",
-    long_description=readme,
     author="Loren Carvalho",
     author_email='me@loren.pizza',
     url='https://github.com/sixninetynine/hiss',

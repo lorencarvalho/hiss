@@ -36,7 +36,7 @@ def load_venv():
         )
         if os.path.exists(virtual_env):
             site.addsitedir(virtual_env)
-            print('(( virtualenv detected -> {} ))'.format(virtual_env))
+            print("virtualenv detected -> {}".format(virtual_env))
 
 
 def load_config(defaults, path):
