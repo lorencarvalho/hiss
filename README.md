@@ -11,10 +11,6 @@ A simple & stripped down python REPL based on iPython
 * unobtrusive default prompt
 * autodetection of virtualenvs
 
-#### screenshots
-
-![](https://www.dropbox.com/s/12djf1idmzjhaei/Screenshot%202016-10-06%2000.59.15.png?raw=true)
-
 #### installation
 
 `pip install hiss`
@@ -42,6 +38,26 @@ python3:
 ```
 pex hiss_repl -c hiss --python `which python3` --python-shebang `which python3` -o ~/bin/hiss3
 ```
+
+#### configuration
+
+simple ipython configs can be put into `~/.hiss` (or anywhere and specified on the cli with `hiss
+-c /path/to/.hiss`
+
+for example:
+
+```
+osx ~ ❯❯❯ cat ~/.hiss
+[IPython]
+InteractiveShell.confirm_exit = True
+```
+
+any string/boolean ipython config option can be used. pure python object support is not yet
+available (so stuff like `TerminalInteractiveShell.prompts\_class = ClassicPrompts` doesn't work)
+
+#### screenshots
+
+![](https://www.dropbox.com/s/12djf1idmzjhaei/Screenshot%202016-10-06%2000.59.15.png?raw=true)
 
 #### still a work in progress
 
