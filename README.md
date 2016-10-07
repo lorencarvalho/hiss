@@ -68,6 +68,22 @@ looking for help with:
 * pygments support! seems like it can be done via the `pygments.styles` entry point
 * adding magic `%hiss` commands for macro management
 
+#### development
+
+```
+$ pex setuptools -- ./setup.py venv
+running venv
+('Creating virtual environment in ', '/home/lcarvalh/src/hiss/venv/hiss')
+New python executable in /home/lcarvalh/src/hiss/venv/hiss/bin/python
+Installing setuptools............done.
+Installing pip...............done.
+Linking `activate` to top level of project.
+
+To activate, simply run `source activate`.
+$ . activate
+(hiss)$ python setup.py develop
+```
+
 ---
 
 * Free software: MIT license
