@@ -13,7 +13,7 @@ A simple & stripped down python REPL based on iPython
 
 #### installation
 
-`pip install hiss`
+`pip install hiss_repl`
 
 alternatively (if you are _cool_ 😎) use [pex](https://github.com/pantsbuild/pex):
 
