@@ -7,9 +7,10 @@ Status](https://travis-ci.org/sixninetynine/hiss.svg?branch=master)](https://tra
 
 A simple & stripped down python REPL based on iPython
 
-* provides all the normal functionality of iPython with a simple dotfile based config
-* unobtrusive default prompt
-* autodetection of virtualenvs
+* all your favorite iPython goodness with a simple dotfile based config!
+* unobtrusive default prompt!
+* auto-magically detect & activate virtualenvs!
+* easy to theme using pygments styles!
 
 #### installation
 
@@ -17,43 +18,50 @@ A simple & stripped down python REPL based on iPython
 
 alternatively (if you are _cool_ 😎) use [pex](https://github.com/pantsbuild/pex):
 
-get pex (if you don't already have it):
-
-```
-virtualenv pextmp
-source pextmp/bin/activate
-pip install pex
-mkdir -p ~/bin
-pex pex -c pex -o ~/bin/pex
-rm -rf pextmp && deactivate
-```
-
-python2.7:
-
-```
-pex hiss_repl -c hiss -o ~/bin/hiss
-```
-python3:
-
-```
-pex hiss_repl -c hiss --python `which python3` --python-shebang `which python3` -o ~/bin/hiss3
-```
+`pex hiss_repl -c hiss -o ~/bin/hiss`
 
 #### configuration
 
-simple ipython configs can be put into `~/.hiss` (or anywhere and specified on the cli with `hiss
--c /path/to/.hiss`
+simple ipython config options can be put into `~/.hiss` (or anywhere so long as you specify the config path on the command line via `hiss -c /path/to/.hiss`
 
 for example:
 
 ```
-osx ~ ❯❯❯ cat ~/.hiss
+$ cat ~/.hiss
 [IPython]
 InteractiveShell.confirm_exit = True
 ```
 
-any string/boolean ipython config option can be used. pure python object support is not yet
-available (so stuff like `TerminalInteractiveShell.prompts\_class = ClassicPrompts` doesn't work)
+Any string or boolean IPython option can be declared. Pure python object support is not yet
+available (so things like `TerminalInteractiveShell.prompts_class = ClassicPrompts` doesn't work)
+
+You can also customize the syntax highlighting using pygments styles!
+
+Set your theme in your hiss config (see `pygments.styles.get_all_styles()` for a full list):
+
+```
+$ cat ~/.hiss
+[IPython]
+InteractiveShell.confirm_exit = True
+
+[hiss.themes]
+theme = monokai
+```
+
+Alternatively, you can drop python files with pygments style classes into `~/.hiss_themes` (or wherever):
+
+```
+$ ls ~/.hiss_themes
+zenburn.py  tomorrow.py
+
+$ cat ~/.hiss
+[IPython]
+InteractiveShell.confirm_exit = True
+
+[hiss.themes]
+theme = tomorrow:Tomorrow
+path = ~/.hiss_themes # this is the default
+```
 
 #### screenshots
 
@@ -65,8 +73,8 @@ very open to contribution! just fork and submit a PR
 
 looking for help with:
 
-* pygments support! seems like it can be done via the `pygments.styles` entry point
 * adding magic `%hiss` commands for macro management
+* less hacky pygments theming maybe?
 
 #### development
 

@@ -2,13 +2,14 @@ import configparser
 import os
 import site
 import sys
+import warnings
 
 import click
-import warnings
+import pkg_resources
+import pygments
 
 from IPython import embed
 from IPython.terminal.prompts import ClassicPrompts
-from IPython.utils.coloransi import TermColors
 from traitlets.config.loader import Config
 
 HISS_CONFIG = os.path.expanduser(os.path.join(os.environ.get('HOME', '~'), '.hiss'))
@@ -39,7 +40,7 @@ def load_venv():
             print("virtualenv detected -> {}".format(virtual_env))
 
 
-def load_config(defaults, path):
+def load_configs(ipython_config, hiss_config, path):
     config = configparser.RawConfigParser()
     config.optionxform = str  # preserve case, cast ints to str
     config.read(path)
@@ -47,11 +48,14 @@ def load_config(defaults, path):
     if config.has_section('IPython'):
         for item, value in config.items('IPython'):
             option, name = item.split('.')
-            config_obj = defaults.get(option, option)
+            config_obj = ipython_config.get(option, option)
             config_obj[name] = casted(value)
-            defaults[option] = config_obj
+            ipython_config[option] = config_obj
 
-    return defaults
+    if config.has_section('hiss.themes'):
+        hiss_config.update(dict(config.items('hiss.themes')))
+
+    return ipython_config, hiss_config
 
 
 def embed_ipython(c):
@@ -61,26 +65,47 @@ def embed_ipython(c):
     embed(config=c)
 
 
+def import_theme(theme=None, path='~/.hiss_themes'):
+    theme = theme.strip("'")
+    if not theme in pygments.styles.get_all_styles():
+        path = os.path.expanduser(path)
+        sys.path.append(path)
+
+        # build entry point
+        dist = pkg_resources.get_distribution('pygments')
+        ep = pkg_resources.EntryPoint.parse('hiss={}'.format(theme))
+        ep.dist = dist
+        dist._ep_map['pygments.styles'] = {'hiss': ep}
+        theme = 'hiss'
+    return theme
+
+
 @click.command()
 @click.option('--config', '-c', default=HISS_CONFIG)
 def main(config):
     """Console script for hiss"""
 
-    c = Config()
+    i = Config()
+    h = dict()
 
     # hiss defaults
-    c.TerminalInteractiveShell.prompts_class = ClassicPrompts
-    c.TerminalInteractiveShell.separate_in = ''
-    c.InteractiveShell.banner1 = BANNER.format(*sys.version_info[0:2])
-    c.PrefilterManager.multi_line_specials = True
-    c.InteractiveShell.autoindent = True
-    c.InteractiveShell.colors = 'linux'
-    c.InteractiveShell.confirm_exit = False
+    i.TerminalInteractiveShell.prompts_class = ClassicPrompts
+    i.TerminalInteractiveShell.separate_in = ''
+    i.TerminalInteractiveShell.true_color = True
+    i.InteractiveShell.banner1 = BANNER.format(*sys.version_info[0:2])
+    i.InteractiveShell.autoindent = True
+    i.InteractiveShell.colors = 'linux'
+    i.InteractiveShell.confirm_exit = False
+    i.PrefilterManager.multi_line_specials = True
 
     # override defaults and add add'l options
-    c = load_config(c, config)
+    i, h = load_configs(i, h, config)
+
+    # set up any themes
+    theme = import_theme(**h)
+    i.TerminalInteractiveShell.highlighting_style = theme or 'legacy'
 
     # load virtual
     load_venv()
 
-    embed_ipython(c)
+    embed_ipython(i)

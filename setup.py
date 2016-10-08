@@ -8,6 +8,7 @@ requirements = [
     'IPython>=5',
     'traitlets',
     'configparser',
+    'pygments',
 ]
 
 
