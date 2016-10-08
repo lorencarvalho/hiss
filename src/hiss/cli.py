@@ -66,7 +66,8 @@ def embed_ipython(c):
 
 
 def import_theme(theme=None, path='~/.hiss_themes'):
-    theme = theme.strip("'")
+    if theme is not None:
+        theme = theme.strip("'")
     if not theme in pygments.styles.get_all_styles():
         path = os.path.expanduser(path)
         sys.path.append(path)
