@@ -66,7 +66,8 @@ def embed_ipython(c):
 
 
 def import_theme(theme=None, path='~/.hiss_themes'):
-    if theme is not None:
+    # TODO: fix this None-checking nonsense:
+    if theme is not None or theme != 'None':
         theme = theme.strip("'")
     if not theme in pygments.styles.get_all_styles():
         path = os.path.expanduser(path)
