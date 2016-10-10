@@ -11,10 +11,13 @@ import pygments
 from IPython import embed
 from IPython.terminal.prompts import ClassicPrompts
 from traitlets.config.loader import Config
+from pygments.styles import get_style_by_name
+from pygments.util import ClassNotFound
 
+PYTHON_VERSION = "python{0}.{1}".format(*sys.version_info[0:2])
 HISS_CONFIG = os.path.expanduser(os.path.join(os.environ.get('HOME', '~'), '.hiss'))
 BANNER = """
-hiss - python{0}.{1}
+hiss - {python_version}
 
 """
 
@@ -32,7 +35,7 @@ def load_venv():
         virtual_env = os.path.join(
             os.environ.get('VIRTUAL_ENV'),
             'lib',
-            'python{0}.{1}'.format(*sys.version_info[0:2]),
+            PYTHON_VERSION,
             'site-packages',
         )
         if os.path.exists(virtual_env):
@@ -94,10 +97,10 @@ def main(config):
     i.TerminalInteractiveShell.prompts_class = ClassicPrompts
     i.TerminalInteractiveShell.separate_in = ''
     i.TerminalInteractiveShell.true_color = True
-    i.InteractiveShell.banner1 = BANNER.format(*sys.version_info[0:2])
-    i.InteractiveShell.autoindent = True
-    i.InteractiveShell.colors = 'linux'
-    i.InteractiveShell.confirm_exit = False
+    i.TerminalInteractiveShell.banner1 = BANNER.format(python_version=PYTHON_VERSION)
+    i.TerminalInteractiveShell.autoindent = True
+    i.TerminalInteractiveShell.colors = 'Linux'
+    i.TerminalInteractiveShell.confirm_exit = False
     i.PrefilterManager.multi_line_specials = True
 
     # override defaults and add add'l options
@@ -106,6 +109,12 @@ def main(config):
     # set up any themes
     theme = import_theme(**h) or 'legacy'
     i.TerminalInteractiveShell.highlighting_style = theme
+
+    # if any extra overrides were set, add them (such as prompt colors)
+    try:
+        i.TerminalInteractiveShell.highlighting_style_overrides = get_style_by_name(theme).styles
+    except ClassNotFound:
+        pass
 
     # load virtual
     load_venv()
