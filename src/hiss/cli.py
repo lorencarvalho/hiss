@@ -67,18 +67,18 @@ def embed_ipython(c):
 
 def import_theme(theme=None, path='~/.hiss_themes'):
     # TODO: fix this None-checking nonsense:
-    if theme is not None or theme != 'None':
+    if theme is not None:
         theme = theme.strip("'")
-    if not theme in pygments.styles.get_all_styles():
-        path = os.path.expanduser(path)
-        sys.path.append(path)
+        if not theme in pygments.styles.get_all_styles():
+            path = os.path.expanduser(path)
+            sys.path.append(path)
 
-        # build entry point
-        dist = pkg_resources.get_distribution('pygments')
-        ep = pkg_resources.EntryPoint.parse('hiss={}'.format(theme))
-        ep.dist = dist
-        dist._ep_map['pygments.styles'] = {'hiss': ep}
-        theme = 'hiss'
+            # build entry point
+            dist = pkg_resources.get_distribution('pygments')
+            ep = pkg_resources.EntryPoint.parse('hiss={}'.format(theme))
+            ep.dist = dist
+            dist._ep_map['pygments.styles'] = {'hiss': ep}
+            theme = 'hiss'
     return theme
 
 
@@ -104,8 +104,8 @@ def main(config):
     i, h = load_configs(i, h, config)
 
     # set up any themes
-    theme = import_theme(**h)
-    i.TerminalInteractiveShell.highlighting_style = theme or 'legacy'
+    theme = import_theme(**h) or 'legacy'
+    i.TerminalInteractiveShell.highlighting_style = theme
 
     # load virtual
     load_venv()
