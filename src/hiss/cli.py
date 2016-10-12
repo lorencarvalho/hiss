@@ -43,6 +43,15 @@ def load_venv():
             print("virtualenv detected -> {}".format(virtual_env))
 
 
+def pexify(entry_point):
+    """ temporarily placing this macro here until I figure out macro management """
+    sys.path[0] = os.path.abspath(sys.path[0])
+    sys.path.insert(0, entry_point)
+    sys.path.insert(0, os.path.abspath(os.path.join(entry_point, '.bootstrap')))
+    from _pex import pex_bootstrapper
+    pex_bootstrapper.bootstrap_pex_env(entry_point)
+
+
 def load_configs(ipython_config, hiss_config, path):
     config = configparser.RawConfigParser()
     config.optionxform = str  # preserve case, cast ints to str
