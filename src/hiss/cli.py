@@ -1,3 +1,4 @@
+import ast
 import configparser
 import os
 import site
@@ -23,11 +24,14 @@ hiss - {python_version}
 
 
 def casted(value):
-    if value.lower() in ('true', '1'):
-        return True
-    elif value.lower() in ('false', '0'):
-        return False
-    return value
+    if isinstance(value, str):
+        if value.lower() in ('true', '1'):
+            value = True
+        elif value.lower() in ('false', '0'):
+            value = False
+    else:
+        value = ast.literal_eval(value)
+    return value 
 
 
 def load_venv():
