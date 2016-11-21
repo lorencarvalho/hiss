@@ -8,12 +8,16 @@ import warnings
 import click
 import pkg_resources
 import pygments
+import six
 
 from IPython import embed
 from IPython.terminal.prompts import ClassicPrompts
 from traitlets.config.loader import Config
 from pygments.styles import get_style_by_name
 from pygments.util import ClassNotFound
+
+import pkg_resources
+six.moves.reload_module(pkg_resources)
 
 PYTHON_VERSION = "python{0}.{1}".format(*sys.version_info[0:2])
 HISS_CONFIG = os.path.expanduser(os.path.join(os.environ.get('HOME', '~'), '.hiss'))
@@ -31,7 +35,7 @@ def casted(value):
             value = False
     else:
         value = ast.literal_eval(value)
-    return value 
+    return value
 
 
 def load_venv():
