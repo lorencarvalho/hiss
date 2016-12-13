@@ -27,28 +27,7 @@ hiss - {python_version}
 
 """
 
-_TO_DEL = []
-
-
-def remember(fn):
-    _TO_DEL.append(fn)
-    return fn
-
-
-@remember
-def casted(value):
-    if isinstance(value, str):
-        if value.lower() in ('true', '1'):
-            value = True
-        elif value.lower() in ('false', '0'):
-            value = False
-    else:
-        value = ast.literal_eval(value)
-    return value
-
-
-@remember
-def load_venv():
+def _load_venv():
     if 'VIRTUAL_ENV' in os.environ:
         virtual_env = os.path.join(
             os.environ.get('VIRTUAL_ENV'),
@@ -61,23 +40,32 @@ def load_venv():
             print("virtualenv detected -> {}".format(virtual_env))
 
 
-@remember
-def load_configs(ipython_config, hiss_config, path):
+def _load_config(path):
+    def casted(value):
+        if isinstance(value, (str, int)) and value.lower() in ('true', '1', 1):
+            value = True
+        elif isinstance(value, (str, int)) and  value.lower() in ('false', '0', 0):
+            value = False
+        else:
+            value = ast.literal_eval(value)
+
+        return value
+
+    ip_overrides = {}
+    themes = {}
+
     config = configparser.RawConfigParser()
     config.optionxform = str  # preserve case, cast ints to str
     config.read(path)
 
     if config.has_section('IPython'):
-        for item, value in config.items('IPython'):
-            option, name = item.split('.')
-            config_obj = ipython_config.get(option, option)
-            config_obj[name] = casted(value)
-            ipython_config[option] = config_obj
+        for option, value in config.items('IPython'):
+            ip_overrides[option] = casted(value)
 
     if config.has_section('hiss.themes'):
-        hiss_config.update(dict(config.items('hiss.themes')))
+        themes.update(dict(config.items('hiss.themes')))
 
-    return ipython_config, hiss_config
+    return ip_overrides, themes
 
 
 def _embed_ipython(c):
@@ -87,8 +75,7 @@ def _embed_ipython(c):
     embed(config=c)
 
 
-@remember
-def import_theme(theme=None, path='~/.hiss_themes'):
+def _import_theme(theme=None, path='~/.hiss_themes'):
     # TODO: fix this None-checking nonsense:
     if theme is not None:
         theme = theme.strip("'")
@@ -111,7 +98,6 @@ def main(config):
     """Console script for hiss"""
 
     i = Config()
-    h = dict()
 
     # hiss defaults
     i.TerminalInteractiveShell.prompts_class = ClassicPrompts
@@ -123,25 +109,20 @@ def main(config):
     i.TerminalInteractiveShell.confirm_exit = False
     i.PrefilterManager.multi_line_specials = True
 
+    # collect config & theme overrides from config file
+    ip_overrides, themes = _load_config(config)
+
     # override defaults and add add'l options
-    i, h = load_configs(i, h, config)
+    ip_overrides['highlighting_style'] = _import_theme(**themes) or 'legacy'
+    i.TerminalInteractiveShell.update(ip_overrides)
 
-    # set up any themes
-    theme = import_theme(**h) or 'legacy'
-    i.TerminalInteractiveShell.highlighting_style = theme
-
-    # if any extra overrides were set, add them (such as prompt colors)
+    # if any extra implicit overrides were set, add them (such as prompt colors)
     try:
-        i.TerminalInteractiveShell.highlighting_style_overrides = get_style_by_name(theme).styles
+        i.TerminalInteractiveShell.highlighting_style_overrides = get_style_by_name(ip_overrides['highlighting_style']).styles
     except ClassNotFound:
         pass
 
     # load virtual
-    load_venv()
-
-    # clear out namespace
-    _TO_DEL.append(remember)
-    for fn in _TO_DEL:
-        del fn
+    _load_venv()
 
     _embed_ipython(i)
