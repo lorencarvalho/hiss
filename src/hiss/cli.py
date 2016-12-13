@@ -6,7 +6,6 @@ import sys
 import warnings
 
 import click
-import pkg_resources
 import pygments
 import six
 
@@ -17,16 +16,26 @@ from pygments.styles import get_style_by_name
 from pygments.util import ClassNotFound
 
 import pkg_resources
-six.moves.reload_module(pkg_resources)
+six.moves.reload_module(pkg_resources)  # for entry_points to load
 
-PYTHON_VERSION = "python{0}.{1}".format(*sys.version_info[0:2])
-HISS_CONFIG = os.path.expanduser(os.path.join(os.environ.get('HOME', '~'), '.hiss'))
-BANNER = """
+from .magic import *  # noqa
+
+_PYTHON_VERSION = "python{0}.{1}".format(*sys.version_info[0:2])
+_HISS_CONFIG = os.path.expanduser(os.path.join(os.environ.get('HOME', '~'), '.hiss'))
+_BANNER = """
 hiss - {python_version}
 
 """
 
+_TO_DEL = []
 
+
+def remember(fn):
+    _TO_DEL.append(fn)
+    return fn
+
+
+@remember
 def casted(value):
     if isinstance(value, str):
         if value.lower() in ('true', '1'):
@@ -38,12 +47,13 @@ def casted(value):
     return value
 
 
+@remember
 def load_venv():
     if 'VIRTUAL_ENV' in os.environ:
         virtual_env = os.path.join(
             os.environ.get('VIRTUAL_ENV'),
             'lib',
-            PYTHON_VERSION,
+            _PYTHON_VERSION,
             'site-packages',
         )
         if os.path.exists(virtual_env):
@@ -51,15 +61,7 @@ def load_venv():
             print("virtualenv detected -> {}".format(virtual_env))
 
 
-def pexify(entry_point):
-    """ temporarily placing this macro here until I figure out macro management """
-    sys.path[0] = os.path.abspath(sys.path[0])
-    sys.path.insert(0, entry_point)
-    sys.path.insert(0, os.path.abspath(os.path.join(entry_point, '.bootstrap')))
-    from _pex import pex_bootstrapper
-    pex_bootstrapper.bootstrap_pex_env(entry_point)
-
-
+@remember
 def load_configs(ipython_config, hiss_config, path):
     config = configparser.RawConfigParser()
     config.optionxform = str  # preserve case, cast ints to str
@@ -78,18 +80,19 @@ def load_configs(ipython_config, hiss_config, path):
     return ipython_config, hiss_config
 
 
-def embed_ipython(c):
+def _embed_ipython(c):
     for warning in (UserWarning, DeprecationWarning, RuntimeWarning):
         warnings.filterwarnings("ignore", category=warning)
 
     embed(config=c)
 
 
+@remember
 def import_theme(theme=None, path='~/.hiss_themes'):
     # TODO: fix this None-checking nonsense:
     if theme is not None:
         theme = theme.strip("'")
-        if not theme in pygments.styles.get_all_styles():
+        if theme not in pygments.styles.get_all_styles():
             path = os.path.expanduser(path)
             sys.path.append(path)
 
@@ -103,7 +106,7 @@ def import_theme(theme=None, path='~/.hiss_themes'):
 
 
 @click.command()
-@click.option('--config', '-c', default=HISS_CONFIG)
+@click.option('--config', '-c', default=_HISS_CONFIG)
 def main(config):
     """Console script for hiss"""
 
@@ -114,7 +117,7 @@ def main(config):
     i.TerminalInteractiveShell.prompts_class = ClassicPrompts
     i.TerminalInteractiveShell.separate_in = ''
     i.TerminalInteractiveShell.true_color = True
-    i.TerminalInteractiveShell.banner1 = BANNER.format(python_version=PYTHON_VERSION)
+    i.TerminalInteractiveShell.banner1 = _BANNER.format(python_version=_PYTHON_VERSION)
     i.TerminalInteractiveShell.autoindent = True
     i.TerminalInteractiveShell.colors = 'Linux'
     i.TerminalInteractiveShell.confirm_exit = False
@@ -136,4 +139,9 @@ def main(config):
     # load virtual
     load_venv()
 
-    embed_ipython(i)
+    # clear out namespace
+    _TO_DEL.append(remember)
+    for fn in _TO_DEL:
+        del fn
+
+    _embed_ipython(i)
