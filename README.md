@@ -42,7 +42,9 @@ Set your theme in your hiss config (see `pygments.styles.get_all_styles()` for a
 ```
 $ cat ~/.hiss
 [IPython]
-InteractiveShell.confirm_exit = True
+confirm_exit = True
+extensions = ['autoreload']
+exec_lines = ['%autoreload 2']
 
 [hiss.themes]
 theme = monokai
@@ -56,7 +58,9 @@ zenburn.py  tomorrow.py
 
 $ cat ~/.hiss
 [IPython]
-InteractiveShell.confirm_exit = True
+confirm_exit = True
+extensions = ['autoreload']
+exec_lines = ['%autoreload 2']
 
 [hiss.themes]
 theme = tomorrow:Tomorrow
