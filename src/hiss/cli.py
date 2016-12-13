@@ -37,7 +37,7 @@ def _load_venv():
         )
         if os.path.exists(virtual_env):
             site.addsitedir(virtual_env)
-            print("virtualenv detected -> {}".format(virtual_env))
+            print("\x1B[3mvirtualenv detected -> {}\x1B[23m".format(virtual_env))
 
 
 def _load_config(path):
@@ -58,12 +58,16 @@ def _load_config(path):
     config.optionxform = str  # preserve case, cast ints to str
     config.read(path)
 
-    if config.has_section('IPython'):
-        for option, value in config.items('IPython'):
-            ip_overrides[option] = casted(value)
+    for section in config.sections():
 
-    if config.has_section('hiss.themes'):
-        themes.update(dict(config.items('hiss.themes')))
+        if section.startswith('IPython'):
+            name = section.split('.')[1]
+            ip_overrides[name] = {}
+            for option, value in config.items(section):
+                ip_overrides[name][option] = casted(value)
+
+        if section == 'hiss.themes':
+            themes.update(dict(config.items('hiss.themes')))
 
     return ip_overrides, themes
 
@@ -113,12 +117,14 @@ def main(config):
     ip_overrides, themes = _load_config(config)
 
     # override defaults and add add'l options
-    ip_overrides['highlighting_style'] = _import_theme(**themes) or 'legacy'
-    i.TerminalInteractiveShell.update(ip_overrides)
+    for cls in ip_overrides:
+        i[cls].update(ip_overrides[cls])
 
-    # if any extra implicit overrides were set, add them (such as prompt colors)
+    # themes and prompt colors
+    theme = _import_theme(**themes) or 'legacy'
     try:
-        i.TerminalInteractiveShell.highlighting_style_overrides = get_style_by_name(ip_overrides['highlighting_style']).styles
+        i.TerminalInteractiveShell.highlighting_style = theme
+        i.TerminalInteractiveShell.highlighting_style_overrides = get_style_by_name(theme).styles
     except ClassNotFound:
         pass
 
