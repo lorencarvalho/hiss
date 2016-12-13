@@ -5,6 +5,7 @@ from click.testing import CliRunner
 
 from hiss.cli import main, casted
 
+
 def test_hello_world():
     runner = CliRunner()
     result = runner.invoke(main)
