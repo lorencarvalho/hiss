@@ -19,5 +19,11 @@ class PatchedEmbeddedMagics(IPython.terminal.embed.EmbeddedMagics):
         else:
             print("No pex provided! Doing nothing.")
 
+    @line_magic
+    def reload_pkg_resources(self, line):
+        import pkg_resources
+        import six
+        six.moves.reload_module(pkg_resources)
+
 
 setattr(IPython.terminal.embed, 'EmbeddedMagics', PatchedEmbeddedMagics)

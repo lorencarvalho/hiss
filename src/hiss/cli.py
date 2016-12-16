@@ -6,6 +6,7 @@ import sys
 import warnings
 
 import click
+import pkg_resources
 import pygments
 import six
 
@@ -15,8 +16,8 @@ from traitlets.config.loader import Config
 from pygments.styles import get_style_by_name
 from pygments.util import ClassNotFound
 
-import pkg_resources
-six.moves.reload_module(pkg_resources)  # for entry_points to load
+# pex can cause problems with entry_points, reloading pkg_resources seems to help
+six.moves.reload_module(pkg_resources)
 
 from .magic import *  # noqa
 
