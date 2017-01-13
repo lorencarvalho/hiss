@@ -4,8 +4,9 @@ import setuptools
 import subprocess
 
 requirements = [
-    'Click>=6.0',
-    'IPython>=5',
+    'Click==6.6',
+    'IPython==5.1.0',
+    'cached_property==1.2.0',
     'traitlets',
     'configparser',
     'pygments',
