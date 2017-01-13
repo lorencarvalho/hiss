@@ -1,7 +1,7 @@
 import configparser
 import os
 import pkg_resources
-import StringIO
+import six
 
 from IPython.terminal.embed import InteractiveShellEmbed
 from IPython.terminal.prompts import ClassicPrompts
@@ -42,16 +42,19 @@ class HissConfig(object):
 
     @cached_property
     def rc(self):
-        with open(self.path) as f:
-            config = StringIO.StringIO()
-            config.write('[hiss]\n')
-            config.write(f.read().replace('%', '%%'))
-            config.seek(0, os.SEEK_SET)
+        try:
+            with open(self.path) as f:
+                config = six.StringIO()
+                config.write('[hiss]\n')
+                config.write(f.read().replace('%', '%%'))
+                config.seek(0, os.SEEK_SET)
 
-            cp = configparser.SafeConfigParser()
-            cp.readfp(config)
+                cp = configparser.SafeConfigParser()
+                cp.readfp(config)
 
-            return dict(cp.items('hiss'))
+                return dict(cp.items('hiss'))
+        except IOError:
+            return {}
 
     def bool(self, value):
         if type(value) == bool:
@@ -78,6 +81,8 @@ class HissConfig(object):
             except ClassNotFound:
                 pygments_style = False
                 theme = 'legacy'
+        else:
+            pygments_style = None
 
         self.config.TerminalInteractiveShell.highlighting_style = theme
 
@@ -102,4 +107,3 @@ class HissConfig(object):
             shell.run_cell('%autoreload 2')
 
         return shell
-

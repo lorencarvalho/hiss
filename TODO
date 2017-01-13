@@ -1,2 +1,0 @@
-Move theme handling into it's own namespace package (hiss.themes ?)
-how are relative imports handled with namespace packages??
