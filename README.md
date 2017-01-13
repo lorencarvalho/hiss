@@ -20,6 +20,11 @@ alternatively (if you are _cool_ 😎) use [pex](https://github.com/pantsbuild/p
 
 `pex hiss_repl -c hiss -o ~/bin/hiss`
 
+for additional themes, include the themes package
+
+`pip install hiss_themes`
+`pex hiss_repl hiss_themes -c hiss -o ~/bin/hiss`
+
 #### configuration
 
 simple ipython config options can be put into `~/.hiss` (or anywhere so long as you specify the config path on the command line via `hiss -c /path/to/.hiss`
@@ -28,45 +33,19 @@ for example:
 
 ```
 $ cat ~/.hiss
-[IPython]
-InteractiveShell.confirm_exit = True
+confirm_exit = false
+autoreload = true
 ```
-
-Any string or boolean IPython option can be declared. Pure python object support is not yet
-available (so things like `TerminalInteractiveShell.prompts_class = ClassicPrompts` doesn't work)
-
 You can also customize the syntax highlighting using pygments styles!
 
 Set your theme in your hiss config (see `pygments.styles.get_all_styles()` for a full list):
 
 ```
 $ cat ~/.hiss
-[IPython]
-confirm_exit = True
-extensions = ['autoreload']
-exec_lines = ['%autoreload 2']
-
-[hiss.themes]
+confirm_exit = false
+autoreload = true
 theme = monokai
 ```
-
-Alternatively, you can drop python files with pygments style classes into `~/.hiss_themes` (or wherever):
-
-```
-$ ls ~/.hiss_themes
-zenburn.py  tomorrow.py
-
-$ cat ~/.hiss
-[IPython]
-confirm_exit = True
-extensions = ['autoreload']
-exec_lines = ['%autoreload 2']
-
-[hiss.themes]
-theme = tomorrow:Tomorrow
-path = ~/.hiss_themes # this is the default
-```
-
 #### screenshots
 
 ![](https://www.dropbox.com/s/12djf1idmzjhaei/Screenshot%202016-10-06%2000.59.15.png?raw=true)
@@ -77,8 +56,8 @@ very open to contribution! just fork and submit a PR
 
 looking for help with:
 
-* adding magic `%hiss` commands for macro management
-* less hacky pygments theming maybe?
+* adding some magic `%hiss` commands for macro management, convienence
+* ~less hacky pygments theming maybe?~
 
 #### development
 
