@@ -16,22 +16,16 @@ hiss - {python_version}
 """
 
 
-def embed_ipython(c):
-    for warning in (UserWarning, DeprecationWarning, RuntimeWarning):
-        warnings.filterwarnings("ignore", category=warning)
-
-    configured_shell = c.configured_shell()
-    configured_shell()
-
-
 @click.command()
 @click.option('--config', '-c', default=_HISS_CONFIG)
 def main(config):
     """Console script for hiss"""
     # load virtual
     load_venv(_PYTHON_VERSION)
-    embed_ipython(HissConfig(config, _BANNER, _PYTHON_VERSION))
 
+    for warning in (UserWarning, DeprecationWarning, RuntimeWarning):
+        warnings.filterwarnings("ignore", category=warning)
 
-if __name__ == '__main__':
-    main()
+    hc = HissConfig(config, _BANNER, _PYTHON_VERSION)
+    import IPython
+    IPython.start_ipython(config=hc.config, quick=True)

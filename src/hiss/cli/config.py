@@ -40,6 +40,11 @@ class HissConfig(object):
         self.config.TerminalInteractiveShell.confirm_exit = False
         self.config.PrefilterManager.multi_line_specials = True
 
+        # hiss overrides
+        self.theme()
+        self.autoreload()
+        self.confirm_exit()
+
     @cached_property
     def rc(self):
         try:
@@ -90,20 +95,11 @@ class HissConfig(object):
             self.config.TerminalInteractiveShell.highlighting_style_overrides = pygments_style.styles
 
     def autoreload(self):
-        return self.bool(self.rc.get('autoreload', False))
+        ar = self.bool(self.rc.get('autoreload', False))
+        if ar:
+            self.config.InteractiveShellApp.extensions = ['autoreload']
+            self.config.InteractiveShellApp.exec_lines = ['%autoreload 2']
 
     def confirm_exit(self):
         ce = self.bool(self.rc.get('confirm_exit', False))
         self.config.TerminalInteractiveShell.confirm_exit = ce
-
-    def configured_shell(self):
-        self.theme()
-        self.confirm_exit()
-
-        shell = InteractiveShellEmbed(config=self.config)
-
-        if self.autoreload():
-            shell.extension_manager.load_extension('autoreload')
-            shell.run_cell('%autoreload 2')
-
-        return shell
