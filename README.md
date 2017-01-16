@@ -43,9 +43,12 @@ xmode = Context # how exceptions are reported, can be 'Context'|'Plain'|'Verbose
 ```
 
 #### screenshots
-
+_default settings_
 ![](https://www.dropbox.com/s/12djf1idmzjhaei/Screenshot%202016-10-06%2000.59.15.png?raw=true)
-
+_with custom theme_
+![](https://www.dropbox.com/s/kruj91cdvc4701y/Screenshot%202017-01-16%2013.10.17.png?raw=true)
+_virtualenv detection_
+![](https://www.dropbox.com/s/s07fy6rttz0i6j0/Screenshot%202017-01-16%2013.11.20.png?raw=true)
 #### still a work in progress
 
 very open to contribution! just fork and submit a PR
