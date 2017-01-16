@@ -27,25 +27,21 @@ for additional themes, include the themes package
 
 #### configuration
 
-simple ipython config options can be put into `~/.hiss` (or anywhere so long as you specify the config path on the command line via `hiss -c /path/to/.hiss`
+simple ipython config options can be put into `~/.hiss` (or anywhere so long as you specify the config path on the command line via `hiss -c /path/to/.hiss`. You can also customize the syntax highlighting using pygments styles (see `pygments.styles.get_all_styles()` for a full list, or install the `hiss_themes` package for additional themes)! 
 
 for example:
 
 ```
 $ cat ~/.hiss
-confirm_exit = false
-autoreload = true
+# Hiss config options, set to defaults
+theme = legacy # syntax color theme, can be any built-in pygments theme or ones added by the hiss_themes package
+autoreload = False # enables or disables iPython's autoreload feature
+confirm_exit = False # controls whether or not you want to be prompted when exiting
+colors = Linux # prompt and traceback color schemes, http://ipython.readthedocs.io/en/stable/config/details.html?highlight=colors#terminal-colors
+editor = vim # which editor to use for macros like %edit
+xmode = Context # how exceptions are reported, can be 'Context'|'Plain'|'Verbose'
 ```
-You can also customize the syntax highlighting using pygments styles!
 
-Set your theme in your hiss config (see `pygments.styles.get_all_styles()` for a full list):
-
-```
-$ cat ~/.hiss
-confirm_exit = false
-autoreload = true
-theme = monokai
-```
 #### screenshots
 
 ![](https://www.dropbox.com/s/12djf1idmzjhaei/Screenshot%202016-10-06%2000.59.15.png?raw=true)
@@ -56,8 +52,7 @@ very open to contribution! just fork and submit a PR
 
 looking for help with:
 
-* adding some magic `%hiss` commands for macro management, convienence
-* ~less hacky pygments theming maybe?~
+* adding some additional magic commands for macro management?, convienence?
 
 #### development
 
