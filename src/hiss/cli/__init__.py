@@ -1,8 +1,9 @@
 import os
 import sys
-import warnings
+import warnings as _warnings
 
 import click
+import IPython
 
 from .config import HissConfig
 from .magic import *  # noqa
@@ -17,15 +18,22 @@ hiss - {python_version}
 
 
 @click.command()
-@click.option('--config', '-c', default=_HISS_CONFIG)
-def main(config):
+@click.option('--config', '-c', type=click.Path(exists=True), default=_HISS_CONFIG)
+@click.option('--warnings/--no-warnings', default=False)
+def main(config, warnings):
     """Console script for hiss"""
-    # load virtual
+    banner = _BANNER.format(python_version=_PYTHON_VERSION)
+
+    if not warnings:
+        for warning in (UserWarning, DeprecationWarning, RuntimeWarning):
+            _warnings.filterwarnings("ignore", category=warning)
+
+    # load virtualenv & config and run ipython
     load_venv(_PYTHON_VERSION)
-
-    for warning in (UserWarning, DeprecationWarning, RuntimeWarning):
-        warnings.filterwarnings("ignore", category=warning)
-
-    hc = HissConfig(config, _BANNER, _PYTHON_VERSION)
-    import IPython
-    IPython.start_ipython(config=hc.config, quick=True)
+    hc = HissConfig(config, banner)
+    IPython.start_ipython(
+        argv=[],
+        config=hc.config,
+        quick=True,
+        auto_create=False,
+        )

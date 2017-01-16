@@ -1,12 +1,11 @@
 import os
 import sys
 
-from IPython.core.magic import magics_class, line_magic
-import IPython.terminal.embed
+from IPython.core.magic import Magics, magics_class, line_magic
 
 
 @magics_class
-class PatchedEmbeddedMagics(IPython.terminal.embed.EmbeddedMagics):
+class HissMagics(Magics):
     @line_magic
     def pex(self, entry_point):
         if entry_point:
@@ -24,6 +23,3 @@ class PatchedEmbeddedMagics(IPython.terminal.embed.EmbeddedMagics):
         import pkg_resources
         import six
         six.moves.reload_module(pkg_resources)
-
-
-setattr(IPython.terminal.embed, 'EmbeddedMagics', PatchedEmbeddedMagics)
