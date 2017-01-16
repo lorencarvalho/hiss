@@ -18,7 +18,7 @@ hiss - {python_version}
 
 
 @click.command()
-@click.option('--config', '-c', type=click.Path(exists=True), default=_HISS_CONFIG)
+@click.option('--config', '-c', type=click.Path(exists=False), default=_HISS_CONFIG)
 @click.option('--warnings/--no-warnings', default=False)
 def main(config, warnings):
     """Console script for hiss"""
