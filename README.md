@@ -23,6 +23,7 @@ alternatively (if you are _cool_ 😎) use [pex](https://github.com/pantsbuild/p
 for additional themes, include the [themes package](https://github.com/sixninetynine/hiss-themes)
 
 `pip install hiss_themes`
+
 `pex hiss_repl hiss_themes -c hiss -o ~/bin/hiss`
 
 *want more themes?* add them to the [themes package](https://github.com/sixninetynine/hiss-themes) !!
