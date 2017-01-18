@@ -14,6 +14,7 @@ class HissMagics(Magics):
             sys.path.insert(0, os.path.abspath(os.path.join(entry_point, '.bootstrap')))
             from _pex import pex_bootstrapper
             pex_bootstrapper.bootstrap_pex_env(entry_point)
+            self.reload_pkg_resources('')
             print("Bootstrapped into pex {0}.".format(entry_point))
         else:
             print("No pex provided! Doing nothing.")
