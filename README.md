@@ -10,6 +10,7 @@ A simple & stripped down python REPL based on iPython
 * all your favorite iPython goodness with a simple dotfile based config!
 * unobtrusive default prompt!
 * auto-magically detect & activate virtualenvs!
+* auto-magically bootstrap into pex'd environments with `%pex`
 * easy to theme using pygments styles!
 
 #### installation
@@ -18,7 +19,20 @@ A simple & stripped down python REPL based on iPython
 
 alternatively (if you are _cool_ 😎) use [pex](https://github.com/pantsbuild/pex):
 
-`pex hiss_repl -c hiss -o ~/bin/hiss`
+```
+# get yourself a pex
+cd `mktemp -d`
+virtualenv .
+source bin/activate
+pip install pex
+mkdir -p ~/bin
+pex pex -c pex -o ~/bin/pex
+deactivate
+cd ~
+
+# install hiss!!
+pex hiss_repl -c hiss -o ~/bin/hiss
+```
 
 for additional themes, include the [themes package](https://github.com/sixninetynine/hiss-themes)
 
@@ -26,23 +40,35 @@ for additional themes, include the [themes package](https://github.com/sixninety
 
 `pex hiss_repl hiss_themes -c hiss -o ~/bin/hiss`
 
-*want more themes?* add them to the [themes package](https://github.com/sixninetynine/hiss-themes) !!
+_want more themes?_ (of course you do) add them to the [themes package](https://github.com/sixninetynine/hiss-themes) !!
 
 #### configuration
 
-simple ipython config options can be put into `~/.hiss` (or anywhere so long as you specify the config path on the command line via `hiss -c /path/to/.hiss`. You can also customize the syntax highlighting using pygments styles (see `pygments.styles.get_all_styles()` for a full list, or install the `hiss_themes` package for additional themes)! 
+simple config options can be put into `~/.hiss` (or anywhere so long as you specify the config path on the command line via `hiss -c /path/to/.hiss`. You can also customize the syntax highlighting using pygments styles (see `pygments.styles.get_all_styles()` for a full list, or install the `hiss_themes` package for additional themes)! 
 
 for example:
 
 ```
 $ cat ~/.hiss
-# Hiss config options, set to defaults
-theme = legacy # syntax color theme, can be any built-in pygments theme or ones added by the hiss_themes package
-autoreload = False # enables or disables iPython's autoreload feature
-confirm_exit = False # controls whether or not you want to be prompted when exiting
-colors = Linux # prompt and traceback color schemes, http://ipython.readthedocs.io/en/stable/config/details.html?highlight=colors#terminal-colors
-editor = vim # which editor to use for macros like %edit
-xmode = Context # how exceptions are reported, can be 'Context'|'Plain'|'Verbose'
+# Hiss config options, values set to defaults
+
+# syntax color theme, can be any built-in pygments theme or ones added by the hiss_themes package
+theme        = legacy
+
+# enables or disables iPython's autoreload feature
+autoreload   = False
+
+# controls whether or not you want to be prompted when exiting
+confirm_exit = False
+
+# prompt and traceback color schemes, http://ipython.readthedocs.io/en/stable/config/details.html?highlight=colors#terminal-colors
+colors       = Linux
+
+# which editor to use for macros like %edit
+editor       = vim
+
+# how exceptions are reported, can be 'Context'|'Plain'|'Verbose'
+xmode        = Context
 ```
 
 #### screenshots
@@ -52,13 +78,18 @@ _with custom theme_
 ![](https://www.dropbox.com/s/kruj91cdvc4701y/Screenshot%202017-01-16%2013.10.17.png?raw=true)
 _virtualenv detection_
 ![](https://www.dropbox.com/s/s07fy6rttz0i6j0/Screenshot%202017-01-16%2013.11.20.png?raw=true)
+
 #### still a work in progress
 
 very open to contribution! just fork and submit a PR
 
 looking for help with:
 
-* adding some additional magic commands for macro management?, convienence?
+* adding some additional magic commands
+  * I'd especially love to see some macro storage magic (commonly function defs, etc)
+* more config options from ipython (we currently only support a small subset)
+* it's pesky that `IPython.start` creates ~/.ipython even though this project doesn't use it
+* moar themes!!
 
 #### development
 
