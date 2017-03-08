@@ -11,9 +11,13 @@ requirements = [
     'configparser',
     'pygments',
     'six',
-    'enum34',
-    'backports.shutil-get-terminal-size',
 ]
+
+if sys.version_info[0] < 3:
+    requirements.extend([
+        'enum34',
+        'backports.shutil-get-terminal-size',
+    ])
 
 
 class Venv(setuptools.Command):
@@ -46,7 +50,7 @@ class Venv(setuptools.Command):
 
 setuptools.setup(
     name='hiss-repl',
-    version='2.0.12',
+    version='2.0.13',
     description="A simple and easily configured iPython-based python repl",
     author="Loren Carvalho",
     author_email='me@loren.pizza',
