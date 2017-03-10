@@ -28,13 +28,14 @@ class HissMagics(Magics):
 
     @line_magic
     def flask(self, app):
-        with app.test_request_context():
-            try:
-                # we assume we have access to flask,
-                # if not, go ahead and raise the importerror
-                from flask import _request_ctx_stack
-            except ImportError:
-                print("You don't have flask in your venv?")
-                raise
+        try:
+            # we assume we have access to flask/werkzeug,
+            # if not, go ahead and raise the importerror
+            from flask import _request_ctx_stack
+            from werkzeug import import_this
+        except ImportError as e:
+            raise ImportError("You don't have flask/werkzeug!\n\n{}".format(e))
+        else:
+            app = import_this(app)
             banner = "Using flask context: {app_repr}\nUse ctrl-d to exit context.".format(app_repr=repr(app))
             start_ipython(banner=banner, user_ns=dict(app=_request_ctx_stack.top.app))
