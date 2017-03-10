@@ -32,10 +32,25 @@ class HissMagics(Magics):
             # we assume we have access to flask/werkzeug,
             # if not, go ahead and raise the importerror
             from flask import _request_ctx_stack
-            from werkzeug import import_this
+            from werkzeug import import_string
         except ImportError as e:
-            raise ImportError("You don't have flask/werkzeug!\n\n{}".format(e))
+            raise ImportError("You don't have flask/werkzeug! {err}".format(err=e))
         else:
-            app = import_this(app)
-            banner = "Using flask context: {app_repr}\nUse ctrl-d to exit context.".format(app_repr=repr(app))
-            start_ipython(banner=banner, user_ns=dict(app=_request_ctx_stack.top.app))
+            app = import_string(app)
+            with app.test_request_context():
+                banner = (
+                    "\nNow using flask context from: {app_repr}\n"
+                    "There is no escape! Exit the session when you are done.\n".format(
+                        app_repr=repr(app)
+                    )
+                )
+
+                # add our custom message
+                get_ipython().banner1 = banner
+
+                # starting a new session dorks up history, so end our sesh
+                get_ipython().history_manager.end_session()
+                get_ipython().history_manager.reset()
+
+                # respawn ipython with the flask context
+                start_ipython(user_ns=dict(app=_request_ctx_stack.top.app))
