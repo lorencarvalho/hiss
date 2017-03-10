@@ -1,7 +1,8 @@
 import os
 import sys
 
-from IPython.core.magic import Magics, magics_class, line_magic, start_ipython
+from IPython.core.magic import Magics, magics_class, line_magic
+from IPython import start_ipython
 
 
 @magics_class
