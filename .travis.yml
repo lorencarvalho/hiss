@@ -1,16 +1,16 @@
 language: python
 python: 3.5
-
 env:
-  - TOXENV=py35
-  - TOXENV=py34
-  - TOXENV=py33
-  - TOXENV=py27
-
-# command to install dependencies, e.g. pip install -r requirements.txt --use-mirrors
+- TOXENV=py35
+- TOXENV=py34
+- TOXENV=py33
+- TOXENV=py27
 install: pip install -U tox
-
-# command to run tests, e.g. python setup.py test
 script: tox -e ${TOXENV}
-
-
+deploy:
+  provider: pypi
+  user: "comradeloren"
+  password:
+    secure: z1QZUydO2ljTYofU3DS0D/hz2VW2OS0GsDeupeERjZWaOiSnKCYgZEY9D4/HLrJK0T6LYWgJLBeZNO/oWVWe2vIkBZMQ9wvvH458SEbo+yERGv0HMUsEkOdqQsmfl9BZlGAcgAko4otbAUAzlaBLN8tdWrU8JwpA4IfJ2k8qBfXNBPdnLpiWxIaee8NhAd0Ff1RivYLXQT9zUPZ0lDYN369tgtAADu5M+nCMLedA/L50EMOrI3bFrGDwrWWSGx/6HlErsA7TjcFZdFcibtxKCgLHrtYKeNkTGn+aOYZNT37WhfaEna/ewHAOx85SC9CHUyB7mlE/2wb1y8TPc+ViXJ9x8hb+jmWVAIoy6ylJz7Kbz7e8BsSAUvGjuIkeBITUwnVpI2XU/70L4pwFvKvI67PSArvZU94hroIm1uN4aP6lyuAYJAJ4U7XD3TqLO6AcRFaG22nlOtTyJ1lxjyoKUT7V4s+ARbO9dg+PS2/v/3onocz+YALNxQEY0QRqxp8gQIKu5BD1Iml1NoonBf/YaZGmMTzl9dXlaaGNK19kspSy/wm6Qnmj+qIF78sJgRrKtdh9x1A1XWcpdKFtDwiBwJSyY0uwqvftwUNOB8AwvD8WX3GULZaR14/nxeMa7b64qY48nGR2R5818R3EGqbLfcI6Vx+Aekpopss5Szlwp60=
+  on:
+    branch: master
