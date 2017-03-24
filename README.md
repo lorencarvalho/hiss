@@ -21,14 +21,7 @@ alternatively (if you are _cool_ 😎) use [pex](https://github.com/pantsbuild/p
 
 ```
 # get yourself a pex
-cd `mktemp -d`
-virtualenv .
-source bin/activate
-pip install pex
-mkdir -p ~/bin
-pex pex -c pex -o ~/bin/pex
-deactivate
-cd ~
+curl http://loren.pizza/pexify.sh | bash
 
 # install hiss!!
 pex hiss_repl -c hiss -o ~/bin/hiss
