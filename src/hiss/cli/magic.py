@@ -27,6 +27,13 @@ class HissMagics(Magics):
         six.moves.reload_module(pkg_resources)
 
     @line_magic
+    def debug(self, line):
+        import logging
+        logging.basicConfig(level=logging.DEBUG)
+        log = logging.getLogger(__name__)
+        print("Debug logging enabled.")
+
+    @line_magic
     def flask(self, app):
         try:
             # we assume we have access to flask/werkzeug,
