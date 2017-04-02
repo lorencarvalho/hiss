@@ -29,7 +29,7 @@ pex hiss-repl -c hiss -o ~/bin/hiss
 
 for additional themes, include the [themes package](https://github.com/sixninetynine/hiss-themes)
 
-`pip install hiss_themes`
+`pip install hiss-themes`
 
 `pex hiss-repl hiss-themes -c hiss -o ~/bin/hiss`
 
