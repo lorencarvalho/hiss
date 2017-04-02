@@ -15,7 +15,7 @@ A simple & stripped down python REPL based on iPython
 
 #### installation
 
-`pip install hiss_repl`
+`pip install hiss-repl`
 
 alternatively (if you are _cool_ 😎) use [pex](https://github.com/pantsbuild/pex):
 
@@ -31,7 +31,7 @@ for additional themes, include the [themes package](https://github.com/sixninety
 
 `pip install hiss_themes`
 
-`pex hiss_repl hiss_themes -c hiss -o ~/bin/hiss`
+`pex hiss-repl hiss_themes -c hiss -o ~/bin/hiss`
 
 _want more themes?_ (of course you do) add them to the [themes package](https://github.com/sixninetynine/hiss-themes) !!
 
