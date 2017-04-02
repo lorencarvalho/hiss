@@ -24,14 +24,14 @@ alternatively (if you are _cool_ 😎) use [pex](https://github.com/pantsbuild/p
 curl http://loren.pizza/pexify.sh | bash
 
 # install hiss!!
-pex hiss_repl -c hiss -o ~/bin/hiss
+pex hiss-repl -c hiss -o ~/bin/hiss
 ```
 
 for additional themes, include the [themes package](https://github.com/sixninetynine/hiss-themes)
 
 `pip install hiss_themes`
 
-`pex hiss-repl hiss_themes -c hiss -o ~/bin/hiss`
+`pex hiss-repl hiss-themes -c hiss -o ~/bin/hiss`
 
 _want more themes?_ (of course you do) add them to the [themes package](https://github.com/sixninetynine/hiss-themes) !!
 
