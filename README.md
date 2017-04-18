@@ -72,6 +72,12 @@ _with custom theme_
 _virtualenv detection_
 ![](https://www.dropbox.com/s/s07fy6rttz0i6j0/Screenshot%202017-01-16%2013.11.20.png?raw=true)
 
+### gifs!
+
+![](https://media.giphy.com/media/l0Iy6x81C9hoVPJzq/giphy.gif)
+
+![](https://media.giphy.com/media/xUA7b3ljMcIQLF5Gs8/giphy.gif)
+
 #### still a work in progress
 
 very open to contribution! just fork and submit a PR
