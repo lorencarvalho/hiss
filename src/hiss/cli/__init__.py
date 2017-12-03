@@ -33,8 +33,11 @@ def main(config: Path, warnings: bool) -> None:
     # check for and (optionally) enter virtualenv
     load_venv(_PYTHON_VERSION)
 
-    # load rc file (if exists)
+    if isinstance(config, str):
+        config = Path(config)
+
     rc = {}
+
     if config.exists():
         rc.update(load_rc(config))
 
