@@ -15,23 +15,13 @@ A simple & stripped down python REPL based on iPython
 
 #### installation
 
+_note: hiss only supports Python 3.6_
+
 `pip install hiss-repl`
-
-alternatively (if you are _cool_ 😎) use [pex](https://github.com/pantsbuild/pex):
-
-```
-# get yourself a pex
-curl http://loren.pizza/pexify.sh | bash
-
-# install hiss!!
-pex hiss-repl -c hiss -o ~/bin/hiss
-```
 
 for additional themes, include the [themes package](https://github.com/sixninetynine/hiss-themes)
 
 `pip install hiss-themes`
-
-`pex hiss-repl hiss-themes -c hiss -o ~/bin/hiss`
 
 _want more themes?_ (of course you do) add them to the [themes package](https://github.com/sixninetynine/hiss-themes) !!
 
@@ -85,25 +75,28 @@ very open to contribution! just fork and submit a PR
 looking for help with:
 
 * adding some additional magic commands
-  * I'd especially love to see some macro storage magic (commonly function defs, etc)
+  * I'd especially love to see some macro storage magic
 * more config options from ipython (we currently only support a small subset)
 * it's pesky that `IPython.start` creates ~/.ipython even though this project doesn't use it
-* moar themes!!
+* more themes!!
 
 #### development
 
+```sh
+git clone https://github.com/sixninetynine/hiss.git
+cd hiss
+python3 setup.py venv
+source activate
+python setup.py develop
 ```
-$ pex setuptools -- ./setup.py venv
-running venv
-('Creating virtual environment in ', '/home/lcarvalh/src/hiss/venv/hiss')
-New python executable in /home/lcarvalh/src/hiss/venv/hiss/bin/python
-Installing setuptools............done.
-Installing pip...............done.
-Linking `activate` to top level of project.
 
-To activate, simply run `source activate`.
-$ . activate
-(hiss)$ python setup.py develop
+#### running tests
+
+(there's like ... practically no tests... 🙃)
+
+```
+pip install tox
+tox
 ```
 
 ---

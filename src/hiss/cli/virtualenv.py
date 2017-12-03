@@ -1,18 +1,20 @@
 import os
 import site
 
+from pathlib import Path
+
 from .magic import HissMagics
 
 
-def load_venv(python_version):
+def load_venv(python_version: str) -> None:
     if 'VIRTUAL_ENV' in os.environ:
-        virtual_env = os.path.join(
+        virtual_env = Path(
             os.environ.get('VIRTUAL_ENV'),
             'lib',
             python_version,
             'site-packages',
         )
-        if os.path.exists(virtual_env):
-            site.addsitedir(virtual_env)
+        if virtual_env.exists():
+            site.addsitedir(str(virtual_env))
             HissMagics().reload_pkg_resources('')
             print("\x1B[3mvirtualenv detected -> {}\x1B[23m".format(virtual_env))
