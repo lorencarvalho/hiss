@@ -9,7 +9,7 @@ from setuptools.command import easy_install
 
 requirements = [
     'Click==6.6',
-    'IPython==6.2.1',
+    'IPython>=6.2.1',
     'cached_property==1.2.0',
     'traitlets',
     'configparser',
@@ -95,7 +95,7 @@ class Venv(setuptools.Command):
 
 setuptools.setup(
     name='hiss-repl',
-    version='3.0.1',
+    version='3.0.2',
     description="A simple and easily configured iPython-based python repl",
     author="Loren Carvalho",
     author_email='me@loren.pizza',
@@ -114,6 +114,7 @@ setuptools.setup(
     classifiers=[
         'License :: OSI Approved :: MIT License',
         'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3 :: Only',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
     ],
