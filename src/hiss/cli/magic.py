@@ -1,6 +1,14 @@
 import importlib
+import json
 import os
+import site
 import sys
+import zipfile
+
+try:
+    from pathlib import Path
+except ImportError:
+    from pathlib2 import Path
 
 from IPython.core.magic import Magics, magics_class, line_magic  # type: ignore
 from IPython import start_ipython  # type: ignore
@@ -8,28 +16,47 @@ from IPython import start_ipython  # type: ignore
 
 @magics_class
 class HissMagics(Magics):
+
+    @line_magic
+    def shiv(self, shiv_path):
+        if shiv_path:
+            sys.path.insert(0, shiv_path)
+            from _bootstrap import cache_path
+
+            zf = zipfile.ZipFile(shiv_path)
+            env = json.loads(zf.read("environment.json"))
+            site.addsitedir(
+                cache_path(zf, Path.home() / ".shiv", env["build_id"]) / "site-packages"
+            )
+            print("Bootstrapped into shiv {shiv_path}".format(shiv_path=shiv_path))
+        else:
+            print("No pyz provided! Doing nothing.")
+
     @line_magic
     def pex(self, entry_point):
         if entry_point:
             sys.path[0] = os.path.abspath(sys.path[0])
             sys.path.insert(0, entry_point)
-            sys.path.insert(0, os.path.abspath(os.path.join(entry_point, '.bootstrap')))
+            sys.path.insert(0, os.path.abspath(os.path.join(entry_point, ".bootstrap")))
             from _pex import pex_bootstrapper  # type: ignore
+
             pex_bootstrapper.bootstrap_pex_env(entry_point)
-            self.reload_pkg_resources('')
+            self.reload_pkg_resources("")
             print("Bootstrapped into pex {0}.".format(entry_point))
         else:
             print("No pex provided! Doing nothing.")
 
     @line_magic
     def reload_pkg_resources(self, line):
-        if 'pkg_resources' in sys.modules:
+        if "pkg_resources" in sys.modules:
             import pkg_resources
+
             importlib.reload(pkg_resources)
 
     @line_magic
     def debug(self, line):
         import logging
+
         logging.basicConfig(level=logging.DEBUG)
         log = logging.getLogger(__name__)
         print("Debug logging enabled.")

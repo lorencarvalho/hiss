@@ -2,14 +2,12 @@ import os
 import sys
 import setuptools
 import subprocess
-import venv
 import re
 
 from setuptools.command import easy_install
 
 requirements = [
     'Click==6.6',
-    'IPython>=6.2.1',
     'cached_property==1.2.0',
     'traitlets',
     'configparser',
@@ -18,7 +16,11 @@ requirements = [
 ]
 
 if sys.version_info[0] < 3:
-    raise SystemExit("hiss does not support python2 !!")
+    PY2 = True
+    requirements.extend(['IPython<6', 'pathlib2', 'typing'])
+else:
+    PY2 = False
+    requirements.append('IPython>=6')
 
 
 # fast entry points, Copyright (c) 2016, Aaron Christianson
@@ -76,6 +78,7 @@ class Venv(setuptools.Command):
         """Abstract method that is required to be overwritten"""
 
     def run(self):
+        import venv
         venv_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'venv', 'hiss')
         print('Creating virtual environment in {}'.format(venv_path))
         venv.main(args=[venv_path])
@@ -118,5 +121,5 @@ setuptools.setup(
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
     ],
-    cmdclass={'venv': Venv},
+    cmdclass={'venv': Venv} if not PY2 else {},
 )

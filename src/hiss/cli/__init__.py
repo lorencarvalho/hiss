@@ -2,7 +2,10 @@ import os
 import sys
 import warnings as _warnings
 
-from pathlib import Path
+try:
+    from pathlib import Path
+except ImportError:
+    from pathlib2 import Path
 
 import click  # type: ignore
 import IPython  # type: ignore
@@ -12,7 +15,7 @@ from .magic import *  # noqa
 from .virtualenv import load_venv
 
 _PYTHON_VERSION = "python{0}.{1}".format(*sys.version_info[0:2])
-_HISS_CONFIG = Path(os.environ.get('HOME', '~'), '.hiss').expanduser()
+_HISS_CONFIG = Path(os.environ.get("HOME", "~"), ".hiss").expanduser()
 _BANNER = """
 hiss - {python_version}
 
@@ -20,9 +23,10 @@ hiss - {python_version}
 
 
 @click.command()
-@click.option('--config', '-c', type=click.Path(exists=False), default=_HISS_CONFIG)
-@click.option('--warnings/--no-warnings', default=False)
-def main(config: Path, warnings: bool) -> None:
+@click.option("--config", "-c", default=_HISS_CONFIG)
+@click.option("--warnings/--no-warnings", default=False)
+def main(config, warnings):
+    # type: (str, bool) -> None
     """Console script for hiss"""
     banner = _BANNER.format(python_version=_PYTHON_VERSION)
 
@@ -45,9 +49,4 @@ def main(config: Path, warnings: bool) -> None:
     hc = build_config(rc, banner)
 
     # start customized ipython!
-    IPython.start_ipython(
-        argv=[],
-        config=hc,
-        quick=True,
-        auto_create=False,
-        )
+    IPython.start_ipython(argv=[], config=hc, quick=True, auto_create=False)
