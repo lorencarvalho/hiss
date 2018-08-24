@@ -5,7 +5,7 @@ import warnings as _warnings
 try:
     from pathlib import Path
 except ImportError:
-    from pathlib2 import Path
+    from pathlib2 import Path  # type: ignore
 
 import click  # type: ignore
 import IPython  # type: ignore
@@ -37,12 +37,9 @@ def main(config, warnings):
     # check for and (optionally) enter virtualenv
     load_venv(_PYTHON_VERSION)
 
-    if isinstance(config, str):
-        config = Path(config)
-
     rc = {}
-
-    if config.exists():
+    config = Path(config)
+    if config.exists():  # type: ignore
         rc.update(load_rc(config))
 
     # build configuration

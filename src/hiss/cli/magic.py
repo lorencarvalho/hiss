@@ -1,14 +1,15 @@
-import importlib
 import json
 import os
 import site
 import sys
 import zipfile
 
+from imp import reload
+
 try:
     from pathlib import Path
 except ImportError:
-    from pathlib2 import Path
+    from pathlib2 import Path  # type: ignore
 
 from IPython.core.magic import Magics, magics_class, line_magic  # type: ignore
 from IPython import start_ipython  # type: ignore
@@ -21,7 +22,7 @@ class HissMagics(Magics):
     def shiv(self, shiv_path):
         if shiv_path:
             sys.path.insert(0, shiv_path)
-            from _bootstrap import cache_path
+            from _bootstrap import cache_path  # type: ignore
 
             zf = zipfile.ZipFile(shiv_path)
             env = json.loads(zf.read("environment.json"))
@@ -51,14 +52,14 @@ class HissMagics(Magics):
         if "pkg_resources" in sys.modules:
             import pkg_resources
 
-            importlib.reload(pkg_resources)
+            reload(pkg_resources)
 
     @line_magic
     def debug(self, line):
         import logging
 
         logging.basicConfig(level=logging.DEBUG)
-        log = logging.getLogger(__name__)
+        log = logging.getLogger(__name__)  # noqa: F841
         print("Debug logging enabled.")
 
     @line_magic
@@ -82,11 +83,11 @@ class HissMagics(Magics):
                 )
 
                 # add our custom message
-                get_ipython().banner1 = banner
+                get_ipython().banner1 = banner  # noqa: F821
 
                 # starting a new session dorks up history, so end our sesh
-                get_ipython().history_manager.end_session()
-                get_ipython().history_manager.reset()
+                get_ipython().history_manager.end_session()  # noqa: F821
+                get_ipython().history_manager.reset()  # noqa: F821
 
                 # respawn ipython with the flask context
                 start_ipython(user_ns=dict(app=_request_ctx_stack.top.app))

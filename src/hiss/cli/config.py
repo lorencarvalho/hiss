@@ -2,18 +2,20 @@ import configparser
 import io
 import os
 
+from typing import Any, Dict, Union, Tuple, Optional  # noqa
+
 try:
     from pathlib import Path
 except ImportError:
-    from pathlib2 import Path
-
-from typing import Dict, Union, Tuple, Optional
+    from pathlib2 import Path  # type: ignore
 
 from IPython.terminal.prompts import ClassicPrompts  # type: ignore
 
 from traitlets.config import Config as Config  # type: ignore
 from pygments.styles import get_style_by_name  # type: ignore
 from pygments.util import ClassNotFound  # type: ignore
+
+assert Path  # to shush flake8
 
 
 def _bool(value):
@@ -25,26 +27,26 @@ def _bool(value):
 def load_rc(path):
     # type: (Path) -> Dict[str, str]
     """This function loads the .hiss file represented as a dict"""
-    config = io.StringIO()
-    config.write("[hiss]\n")
+    config = io.BytesIO()
+    config.write(b"[hiss]\n")
 
     # attempt load of rc file
     try:
-        with open(path) as f:
-            config.write(f.read().replace("%", "%%"))
+        with open(str(path)) as f:
+            config.write(f.read().replace("%", "%%").encode("utf8"))
     except IOError:
         # no rc file found
         pass
 
     config.seek(0, os.SEEK_SET)
     parser = configparser.SafeConfigParser()
-    parser.read_file(config)
+    parser.read_string(config.read().decode())
 
     return {key: str(value) for key, value in parser.items("hiss")}
 
 
 def get_theme(rc):
-    # type: (Dict[str, str]) -> Tuple[str, Optional[str]]
+    # type: (Dict[str, str]) -> Tuple[str, Optional[Any]]
     pygments_style = None
     theme = rc.get("theme", "legacy")
 

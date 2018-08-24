@@ -1,9 +1,9 @@
 [<img src="https://img.shields.io/pypi/v/hiss_repl.svg">](https://pypi.python.org/pypi/hiss_repl)
 [![Build
 Status](https://travis-ci.org/sixninetynine/hiss.svg?branch=master)](https://travis-ci.org/sixninetynine/hiss)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black)
 
-
-# 🐍 hiss
+# hiss
 
 A simple & stripped down python REPL based on iPython
 
@@ -14,8 +14,6 @@ A simple & stripped down python REPL based on iPython
 * easy to theme using pygments styles!
 
 #### installation
-
-_note: hiss only supports Python 3.6_
 
 `pip install hiss-repl`
 

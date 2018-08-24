@@ -63,3 +63,4 @@ target/
 .python-version
 venv/
 activate
+.mypy_cache

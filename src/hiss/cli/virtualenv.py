@@ -4,13 +4,13 @@ import site
 try:
     from pathlib import Path
 except ImportError:
-    from pathlib2 import Path
+    from pathlib2 import Path  # type: ignore
 
 from .magic import HissMagics
 
 
 def load_venv(python_version):
-    # type: (str) -> None:
+    # type: (str) -> None
     if "VIRTUAL_ENV" in os.environ:
         virtual_env = Path(
             os.environ.get("VIRTUAL_ENV"), "lib", python_version, "site-packages"
