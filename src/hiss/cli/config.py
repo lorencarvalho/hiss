@@ -78,6 +78,7 @@ def build_config(rc, banner):
     config.TerminalInteractiveShell.confirm_exit = _bool(rc.get("confirm_exit", False))
     config.TerminalInteractiveShell.autoindent = _bool(rc.get("autoindent", True))
     config.TerminalInteractiveShell.colors = rc.get("colors", "Linux")
+    config.TerminalInteractiveShell.editing_mode = rc.get("editing_mode", "emacs")
 
     # auto reload
     if _bool(rc.get("autoreload", False)):

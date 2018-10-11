@@ -50,6 +50,9 @@ editor       = vim
 
 # how exceptions are reported, can be 'Context'|'Plain'|'Verbose'
 xmode        = Context
+
+# changes the editing mode in the REPL
+editing_mode = vi
 ```
 
 #### screenshots
