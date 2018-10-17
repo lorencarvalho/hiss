@@ -9,10 +9,11 @@ from setuptools.command import easy_install
 install_requires = [
     "Click>=6.6",
     "cached_property",
-    "traitlets",
     "configparser",
+    "ipdb",
     "pygments",
     "six",
+    "traitlets",
 ]
 
 _py2_extras = ["IPython<6", "pathlib2", "typing"]
