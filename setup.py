@@ -6,8 +6,8 @@ import re
 
 from setuptools.command import easy_install
 
-requirements = [
-    "Click==6.6",
+install_requires = [
+    "Click>=6.6",
     "cached_property",
     "traitlets",
     "configparser",
@@ -15,12 +15,19 @@ requirements = [
     "six",
 ]
 
-if sys.version_info[0] < 3:
-    PY2 = True
-    requirements.extend(["IPython<6", "pathlib2", "typing"])
-else:
-    PY2 = False
-    requirements.append("IPython==6.5.0")
+_py2_extras = ["IPython<6", "pathlib2", "typing"]
+
+extras_require = {
+    ":python_version<'3'": _py2_extras,
+    ":python_version>='3'": ["IPython==6.5.0"],
+}
+
+if int(setuptools.__version__.split('.')[0]) < 18:
+    extras_require = {}
+    if sys.version_info < (3, 0):
+        install_requires.extend(_py2_extras)
+    else:
+        install_requires.append("IPython==6.5.0")
 
 
 # fast entry points, Copyright (c) 2016, Aaron Christianson
@@ -96,7 +103,7 @@ class Venv(setuptools.Command):
 
 setuptools.setup(
     name="hiss-repl",
-    version="3.1.2",
+    version="3.1.3",
     description="A simple and easily configured iPython-based python repl",
     author="Loren Carvalho",
     author_email="me@loren.pizza",
@@ -105,15 +112,16 @@ setuptools.setup(
     package_dir={"": "src"},
     entry_points={"console_scripts": ["hiss=hiss.cli:main"]},
     include_package_data=True,
-    install_requires=requirements,
+    install_requires=install_requires,
+    extras_require=extras_require,
     license="MIT license",
     keywords="hiss",
     classifiers=[
         "License :: OSI Approved :: MIT License",
-        "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3 :: Only",
+        "Programming Language :: Python :: 2.7",
         "Programming Language :: Python :: 3.5",
         "Programming Language :: Python :: 3.6",
+        "Programming Language :: Python :: 3.7",
     ],
-    cmdclass={"venv": Venv} if not PY2 else {},
+    cmdclass={"venv": Venv},
 )
