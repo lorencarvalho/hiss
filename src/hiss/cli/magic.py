@@ -17,7 +17,6 @@ from IPython import start_ipython  # type: ignore
 
 @magics_class
 class HissMagics(Magics):
-
     @line_magic
     def shiv(self, shiv_path):
         if shiv_path:
