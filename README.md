@@ -1,6 +1,6 @@
 [<img src="https://img.shields.io/pypi/v/hiss_repl.svg">](https://pypi.python.org/pypi/hiss_repl)
 [![Build
-Status](https://travis-ci.org/sixninetynine/hiss.svg?branch=master)](https://travis-ci.org/sixninetynine/hiss)
+Status](https://travis-ci.org/lorencarvalho/hiss.svg?branch=master)](https://travis-ci.org/sixninetynine/hiss)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black)
 
 # hiss
