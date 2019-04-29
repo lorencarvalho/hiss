@@ -23,6 +23,18 @@ for additional themes, include the [themes package](https://github.com/sixninety
 
 _want more themes?_ (of course you do) add them to the [themes package](https://github.com/sixninetynine/hiss-themes) !!
 
+for a fully self-contained binary executable you can leverage `shiv`:
+
+```
+cd `mktemp -d`
+python3 -m venv .
+. bin/activate
+pip install shiv
+shiv -c hiss -o hiss hiss-repl hiss-themes ipdb -p '/usr/bin/env python3'
+mkdir -p ~/bin
+mv hiss ~/bin/hiss
+```
+
 #### configuration
 
 simple config options can be put into `~/.hiss` (or anywhere so long as you specify the config path on the command line via `hiss -c /path/to/.hiss`. You can also customize the syntax highlighting using pygments styles (see `pygments.styles.get_all_styles()` for a full list, or install the `hiss_themes` package for additional themes)! 
