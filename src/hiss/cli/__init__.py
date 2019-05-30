@@ -8,6 +8,7 @@ except ImportError:
     from pathlib2 import Path  # type: ignore
 
 import click  # type: ignore
+import ipdb  # type: ignore
 import IPython  # type: ignore
 
 from .config import build_config, load_rc
@@ -20,6 +21,9 @@ _BANNER = """
 hiss - {python_version}
 
 """
+
+# Use ipdb for `breakpoint`
+sys.breakpointhook = ipdb.set_trace
 
 
 @click.command()

@@ -104,7 +104,7 @@ class Venv(setuptools.Command):
 
 setuptools.setup(
     name="hiss-repl",
-    version="3.1.4",
+    version="3.1.5",
     description="A simple and easily configured iPython-based python repl",
     author="Loren Carvalho",
     author_email="me@loren.pizza",
