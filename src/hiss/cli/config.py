@@ -98,6 +98,8 @@ def build_config(rc, banner):
         [
             "from hiss.cli.magic import HissMagics",
             "get_ipython().register_magics(HissMagics)",
+            "import ipdb, sys",
+            "sys.breakpointhook = ipdb.set_trace",
         ]
     )
 
