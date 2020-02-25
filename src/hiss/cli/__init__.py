@@ -22,10 +22,11 @@ hiss - {python_version}
 """
 
 
-@click.command()
+@click.command(context_settings={"ignore_unknown_options": True})
 @click.option("--config", "-c", default=_HISS_CONFIG)
 @click.option("--warnings/--no-warnings", default=False)
-def main(config, warnings):
+@click.argument("extra_args", nargs=-1, type=click.UNPROCESSED)
+def main(config, warnings, extra_args):
     # type: (str, bool) -> None
     """Console script for hiss"""
     banner = _BANNER.format(python_version=_PYTHON_VERSION)
@@ -46,4 +47,4 @@ def main(config, warnings):
     hc = build_config(rc, banner)
 
     # start customized ipython!
-    IPython.start_ipython(argv=[], config=hc, quick=True, auto_create=False)
+    IPython.start_ipython(argv=extra_args, config=hc, quick=True, auto_create=False)

@@ -7,12 +7,11 @@ import re
 from setuptools.command import easy_install
 
 install_requires = [
-    "Click>=6.6",
+    "click>=6.7,!=7.0",
     "cached_property",
     "configparser",
     "ipdb",
     "pygments",
-    "six",
     "traitlets",
 ]
 
@@ -104,7 +103,7 @@ class Venv(setuptools.Command):
 
 setuptools.setup(
     name="hiss-repl",
-    version="3.1.6",
+    version="3.2.0",
     description="A simple and easily configured iPython-based python repl",
     author="Loren Carvalho",
     author_email="me@loren.pizza",
