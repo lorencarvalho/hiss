@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "hiss-repl"
+version = "4.0.1"
+description = "A simple and easily configured iPython-based python repl"
+dependencies = [
+  "cached_property",
+  "configparser",
+  "ipdb",
+  "pygments",
+  "traitlets",
+]
+
+[project.scripts]
+hiss = "hiss.cli:main"
+
+[black]
+line_length = 120
